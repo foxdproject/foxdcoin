@@ -1,0 +1,92 @@
+#!/sbin/runscript
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/foxdcoin/.foxdcoin" ]; then
+	FOXDCOIND_DEFAULT_DATADIR="/var/lib/foxdcoin/.foxdcoin"
+else
+	FOXDCOIND_DEFAULT_DATADIR="/var/lib/foxdcoind"
+fi
+
+FOXDCOIND_CONFIGFILE=${FOXDCOIND_CONFIGFILE:-/etc/foxdcoin/foxdcoin.conf}
+FOXDCOIND_PIDDIR=${FOXDCOIND_PIDDIR:-/var/run/foxdcoind}
+FOXDCOIND_PIDFILE=${FOXDCOIND_PIDFILE:-${FOXDCOIND_PIDDIR}/foxdcoind.pid}
+FOXDCOIND_DATADIR=${FOXDCOIND_DATADIR:-${FOXDCOIND_DEFAULT_DATADIR}}
+FOXDCOIND_USER=${FOXDCOIND_USER:-${FOXDCOIN_USER:-foxdcoin}}
+FOXDCOIND_GROUP=${FOXDCOIND_GROUP:-foxdcoin}
+FOXDCOIND_BIN=${FOXDCOIND_BIN:-/usr/bin/foxdcoind}
+FOXDCOIND_NICE=${FOXDCOIND_NICE:-${NICELEVEL:-0}}
+FOXDCOIND_OPTS="${FOXDCOIND_OPTS:-${FOXDCOIN_OPTS}}"
+
+name="Foxdcoin Core Daemon"
+description="Foxdcoin cryptocurrency P2P network daemon"
+
+command="/usr/bin/foxdcoind"
+command_args="-pid=\"${FOXDCOIND_PIDFILE}\" \
+		-conf=\"${FOXDCOIND_CONFIGFILE}\" \
+		-datadir=\"${FOXDCOIND_DATADIR}\" \
+		-daemon \
+		${FOXDCOIND_OPTS}"
+
+required_files="${FOXDCOIND_CONFIGFILE}"
+start_stop_daemon_args="-u ${FOXDCOIND_USER} \
+			-N ${FOXDCOIND_NICE} -w 2000"
+pidfile="${FOXDCOIND_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${FOXDCOIND_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${FOXDCOIND_USER}:${FOXDCOIND_GROUP}" \
+	"${FOXDCOIND_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${FOXDCOIND_USER}:${FOXDCOIND_GROUP}" \
+	"${FOXDCOIND_PIDDIR}"
+
+	checkpath -f \
+	-o ${FOXDCOIND_USER}:${FOXDCOIND_GROUP} \
+	-m 0660 \
+	${FOXDCOIND_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${FOXDCOIND_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run foxdcoind."
+		eerror "The setting must appear in ${FOXDCOIND_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Foxdcoin Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

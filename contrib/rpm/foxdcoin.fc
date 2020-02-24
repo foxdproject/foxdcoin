@@ -1,0 +1,8 @@
+/usr/bin/foxdcoin-cli		--	gen_context(system_u:object_r:foxdcoin_exec_t,s0)
+/usr/sbin/foxdcoind		--	gen_context(system_u:object_r:foxdcoin_exec_t,s0)
+/usr/lib(64)?/foxdcoin/foxdcoind		--	gen_context(system_u:object_r:foxdcoin_exec_t,s0)
+
+/etc/foxdcoin(/.*)?		gen_context(system_u:object_r:foxdcoin_conf_t,s0)
+/var/lib/foxdcoin(/.*)?		gen_context(system_u:object_r:foxdcoin_var_lib_t,s0)
+
+(/var)?/run/foxdcoind(/.*)?   gen_context(system_u:object_r:foxdcoin_var_run_t,s0)

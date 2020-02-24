@@ -1,0 +1,22 @@
+[Unit]
+Description=Foxdcoin's distributed currency daemon
+After=network.target
+
+[Service]
+User=foxdcoin
+Group=foxdcoin
+
+Type=forking
+PIDFile=/var/lib/foxdcoind/foxdcoind.pid
+ExecStart=/usr/bin/foxdcoind -daemon -pid=/var/lib/foxdcoind/foxdcoind.pid \
+-conf=/etc/foxdcoin/foxdcoin.conf -datadir=/var/lib/foxdcoind -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,39 @@
+Ravencoin is using BIP9 to activate asset support which is phase 2 of the Ravencoin roadmap (RIP2).   BIP9 should ensure that a majority of miners have switched over to the newer asset-aware code.
+
+BIP9 will look back at each difficulty change (every 2016 blocks) and count the number of blocks that were mined with the new version.  If the designated threshold is hit, then it will "lock in" the change, and there will be another 2016 blocks before it actually activates.   2016 blocks in Ravencoin is approximately 1.4 days.
+
+Testnet activation
+Starting on July 25, 2018 (UTC) the newer Ravencoin reference client will start watching the testnet blockchain for newer version numbers indicating that miners have moved over to the new client.   The binaries will be available for download on July 30, 2018.  Starting at the next difficulty adjustment, it will watch for 1310 of 2016 blocks (~65%) with new version number.  What happens to the other 35%?   Since it is a hard fork, they will be on the wrong chain, and will need to upgrade their software, delete their chain data (not their wallet.dat), and download again.
+
+Mainnet Activation
+Starting on October 31, 2018 (UTC), the newer Ravencoin reference client will start watching the mainnet blockchain for newer version numbers indicating that miner's have upgraded.   Starting at the next difficulty adjustment, it will watch for 1632 of 2016 blocks (~80%) with the new version number.   Once that threshold has been hit, the changed will be "locked in", but not activated for another 2016 blocks (~1.4 days).   Anyone not using the new software upon activation will be "forked off" and will be on the counterfeit blockchain.
+
+We are hoping this will be the only hard fork, and that phases 3-6 can be added without requiring these extraordinary efforts at preventing a chain split.
+
+Activation Stages
+1.	Triggered by a date (July 25, 2018 for testnet, Oct 31, 2018 for mainnet)
+2.	Next difficulty starts the count (could be from 0 blocks to 2016 blocks) - Average 1008 blocks (~17 hours).
+3.	After each 2016 blocks (~1.4 days), the Ravencoin client will count the blocks and if the requisite number of blocks have mined with the new client, assets will be "locked in", but not active.
+4.	After another 2016 blocks (~1.4 days), the assets feature will activate.
+
+What could go wrong?
+•	The majority of mining power chooses not to upgrade, and the activation possibility will expire after 1 year.   No assets for you!
+•	Some incompatible change in the consensus rules sneaks in, and the chain splits before the BIP9 activation.  We should catch this in Testnet, and fix these issues before mainnet starts.   For this reason, it is not a good idea for miners to use the new software on mainnet until we see the impacts on testnet.
+•	Some unforeseen problem occurs after activation on testnet.   This is the reason for testnet, and we should have enough time to fix the problems before mainnet even attempts activation.
+•	Some users choose not to upgrade and there are two Ravencoin chains.  We hope this doesn't happen and we will put our efforts towards making the asset-aware chain the one that trades, and has value.  This is not in our control, but the economic incentives should work to move everyone to the more valuable asset-aware client.
+•	Some changes that will be needed for phase 3-6, which may require another BIP9 activation.  We hope this isn't necessary.
+•	Something we didn't foresee.
+
+How to tell if Asset capabilities are active?
+In the raven-qt, under Help->Debug Window (in the console), call getblockchaininfo OR raven-cli getblockchaininfo on the command line.
+Expect:
+result : {
+"bip9_softforks": {
+		"assets": {
+				"status": "active",  (watch this for started, locked_in, active)
+				"startTime": 1532498400,
+				"timeout": 1532498400,
+				"since": 419328
+		}
+}
+

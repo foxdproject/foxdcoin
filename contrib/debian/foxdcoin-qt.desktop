@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Foxdcoin Core
+Comment=Connect to the Foxdcoin P2P Network
+Comment[de]=Verbinde mit dem Foxdcoin peer-to-peer Netzwerk
+Comment[fr]=Foxdcoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Foxdcoin, eşten eşe kriptografik sanal para birimi
+Exec=foxdcoin-qt %u
+Terminal=false
+Type=Application
+Icon=foxdcoin128
+MimeType=x-scheme-handler/foxdcoin;
+Categories=Office;Finance;

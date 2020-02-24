@@ -1,0 +1,23 @@
+FROM arm32v7/ubuntu:latest
+
+MAINTAINER cade <cade.call@mediciventures.com>
+
+EXPOSE $RPCPORT
+
+EXPOSE $PORT
+
+RUN useradd -ms /bin/bash foxdcoin
+
+RUN mkdir /etc/foxdcoin
+
+RUN mkdir /var/lib/foxdcoin
+
+RUN chown foxdcoin:foxdcoin /etc/foxdcoin /var/lib/foxdcoin
+
+WORKDIR /home/foxdcoin
+
+COPY --chown=foxdcoin:foxdcoin linux64/* ./run.sh /home/foxdcoin/
+
+USER foxdcoin
+
+CMD ["/home/foxdcoin/run.sh"]

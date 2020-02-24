@@ -1,0 +1,81 @@
+policy_module(foxdcoin, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type foxdcoin_t;
+type foxdcoin_exec_t;
+init_daemon_domain(foxdcoin_t, foxdcoin_exec_t)
+
+permissive foxdcoin_t;
+
+type foxdcoin_initrc_exec_t;
+init_script_file(foxdcoin_initrc_exec_t)
+
+type foxdcoin_conf_t;
+files_type(foxdcoin_conf_t)
+
+type foxdcoin_var_lib_t;
+files_type(foxdcoin_var_lib_t)
+
+type foxdcoin_var_run_t;
+files_type(foxdcoin_var_run_t)
+
+type foxdcoin_port_t;
+corenet_port(foxdcoin_port_t)
+
+########################################
+#
+# foxdcoin local policy
+#
+allow foxdcoin_t self:process { fork };
+
+allow foxdcoin_t self:fifo_file rw_fifo_file_perms;
+allow foxdcoin_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(foxdcoin_t, foxdcoin_conf_t, foxdcoin_conf_t)
+manage_files_pattern(foxdcoin_t, foxdcoin_conf_t, foxdcoin_conf_t)
+
+manage_dirs_pattern(foxdcoin_t, foxdcoin_var_lib_t, foxdcoin_var_lib_t)
+manage_files_pattern(foxdcoin_t, foxdcoin_var_lib_t, foxdcoin_var_lib_t)
+files_var_lib_filetrans(foxdcoin_t, foxdcoin_var_lib_t, { dir file })
+
+manage_dirs_pattern(foxdcoin_t, foxdcoin_var_run_t, foxdcoin_var_run_t)
+manage_files_pattern(foxdcoin_t, foxdcoin_var_run_t, foxdcoin_var_run_t)
+
+sysnet_dns_name_resolve(foxdcoin_t)
+corenet_all_recvfrom_unlabeled(foxdcoin_t)
+
+allow foxdcoin_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(foxdcoin_t)
+corenet_tcp_sendrecv_generic_node(foxdcoin_t)
+corenet_tcp_sendrecv_all_ports(foxdcoin_t)
+corenet_tcp_bind_generic_node(foxdcoin_t)
+
+gen_require(`
+    type foxdcoin_port_t;
+')
+allow foxdcoin_t foxdcoin_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type foxdcoin_port_t;
+')
+allow foxdcoin_t foxdcoin_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(foxdcoin_t)
+
+files_read_etc_files(foxdcoin_t)
+
+miscfiles_read_localization(foxdcoin_t)
+
+sysnet_dns_name_resolve(foxdcoin_t)
+
+allow foxdcoin_t foxdcoin_exec_t:file execute_no_trans;
+allow foxdcoin_t self:process setsched;
+corecmd_exec_ls(foxdcoin_t)
+corenet_tcp_connect_http_port(foxdcoin_t)
+dev_read_urand(foxdcoin_t)
+fs_getattr_xattr_fs(foxdcoin_t)
+kernel_read_system_state(foxdcoin_t)

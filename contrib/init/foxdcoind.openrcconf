@@ -1,0 +1,33 @@
+# /etc/conf.d/foxdcoind: config file for /etc/init.d/foxdcoind
+
+# Config file location
+#FOXDCOIND_CONFIGFILE="/etc/foxdcoin/foxdcoin.conf"
+
+# What directory to write pidfile to?  (created and owned by $FOXDCOIND_USER)
+#FOXDCOIND_PIDDIR="/var/run/foxdcoind"
+
+# What filename to give the pidfile
+#FOXDCOIND_PIDFILE="${FOXDCOIND_PIDDIR}/foxdcoind.pid"
+
+# Where to write foxdcoind data (be mindful that the blockchain is large)
+#FOXDCOIND_DATADIR="/var/lib/foxdcoind"
+
+# User and group to own foxdcoind process
+#FOXDCOIND_USER="foxdcoin"
+#FOXDCOIND_GROUP="foxdcoin"
+
+# Path to foxdcoind executable
+#FOXDCOIND_BIN="/usr/bin/foxdcoind"
+
+# Nice value to run foxdcoind under
+#FOXDCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#FOXDCOIND_OPTS=""
+
+# The timeout in seconds OpenRC will wait for foxdcoind to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+FOXDCOIND_SIGTERM_TIMEOUT=60
