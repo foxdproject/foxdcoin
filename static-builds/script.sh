@@ -31,6 +31,7 @@ rm -rf ~/foxdcoin ~/sign ~/release
 
 git clone https://github.com/foxdproject/foxdcoin.git
 cd ~/foxdcoin
+chmod -R +x *
 git checkout $BRANCH
 
 
