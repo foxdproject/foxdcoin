@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Set DISTNAME, BRANCH and MAKEOPTS to the desired settings
-DISTNAME=foxdcoin-2.0.3
-MAKEOPTS="-j $(nproc)"
+DISTNAME=foxdcoin-1.0.1
+MAKEOPTS="-j15"
 BRANCH=master
 clear
 if [[ $EUID -ne 0 ]]; then
@@ -29,7 +29,7 @@ cd ~/
 # Removes any existing builds and starts clean WARNING
 rm -rf ~/foxdcoin ~/sign ~/release
 
-git clone https://github.com/foxrtb/bird.git foxdcoin
+git clone https://github.com/foxdproject/foxdcoin.git
 cd ~/foxdcoin
 git checkout $BRANCH
 
