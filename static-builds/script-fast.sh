@@ -31,7 +31,7 @@ rm -rf ~/foxdcoin ~/sign ~/release
 
 git clone https://github.com/foxdproject/foxdcoin.git
 cd ~/foxdcoin
-chmod -R +x *
+
 git checkout $BRANCH
 
 
@@ -63,134 +63,6 @@ rm -rf ~/linux64
 make clean
 export PATH=$PATH_orig
 
-
-echo @@@
-echo @@@"Building general sourcecode"
-echo @@@
-
-cd ~/foxdcoin
-export PATH=$PWD/depends/x86_64-linux-gnu/native/bin:$PATH
-./autogen.sh
-CONFIG_SITE=$PWD/depends/x86_64-linux-gnu/share/config.site ./configure --prefix=/
-make dist
-SOURCEDIST=`echo foxdcoin-*.tar.gz`
-mkdir -p ~/foxdcoin/temp
-cd ~/foxdcoin/temp
-tar xf ../$SOURCEDIST
-find foxdcoin-* | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ../$SOURCEDIST
-cd ~/foxdcoin
-mv $SOURCEDIST ~/release
-rm -rf temp
-make clean
-export PATH=$PATH_orig
-
-
-echo @@@
-echo @@@"Building linux 32 binaries"
-echo @@@
-
-cd ~/
-mkdir -p ~/wrapped/extra_includes/i686-pc-linux-gnu
-ln -s /usr/include/x86_64-linux-gnu/asm ~/wrapped/extra_includes/i686-pc-linux-gnu/asm
-
-for prog in gcc g++; do
-rm -f ~/wrapped/${prog}
-cat << EOF > ~/wrapped/${prog}
-#!/usr/bin/env bash
-REAL="`which -a ${prog} | grep -v $PWD/wrapped/${prog} | head -1`"
-for var in "\$@"
-do
-  if [ "\$var" = "-m32" ]; then
-    export C_INCLUDE_PATH="$PWD/wrapped/extra_includes/i686-pc-linux-gnu"
-    export CPLUS_INCLUDE_PATH="$PWD/wrapped/extra_includes/i686-pc-linux-gnu"
-    break
-  fi
-done
-\$REAL \$@
-EOF
-chmod +x ~/wrapped/${prog}
-done
-
-export PATH=$PWD/wrapped:$PATH
-export HOST_ID_SALT="$PWD/wrapped/extra_includes/i386-linux-gnu"
-cd ~/foxdcoin/depends
-make HOST=i686-pc-linux-gnu $MAKEOPTS
-unset HOST_ID_SALT
-cd ~/foxdcoin
-export PATH=$PWD/depends/i686-pc-linux-gnu/native/bin:$PATH
-./autogen.sh
-CONFIG_SITE=$PWD/depends/i686-pc-linux-gnu/share/config.site ./configure --prefix=/ --disable-ccache --disable-maintainer-mode --disable-dependency-tracking --enable-glibc-back-compat --enable-reduce-exports --disable-bench --disable-gui-tests CFLAGS="-O2 -g" CXXFLAGS="-O2 -g" LDFLAGS="-static-libstdc++"
-make $MAKEOPTS 
-make -C src check-security
-make -C src check-symbols 
-mkdir -p ~/linux32
-make install DESTDIR=~/linux32/$DISTNAME
-cd ~/linux32
-find . -name "lib*.la" -delete
-find . -name "lib*.a" -delete
-rm -rf $DISTNAME/lib/pkgconfig
-find ${DISTNAME}/bin -type f -executable -exec ../foxdcoin/contrib/devtools/split-debug.sh {} {} {}.dbg \;
-find ${DISTNAME}/lib -type f -exec ../foxdcoin/contrib/devtools/split-debug.sh {} {} {}.dbg \;
-find $DISTNAME/ -not -name "*.dbg" | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ~/release/$DISTNAME-i686-pc-linux-gnu.tar.gz
-cd ~/foxdcoin
-rm -rf ~/linux32
-rm -rf ~/wrapped
-make clean
-export PATH=$PATH_orig
-
-
-echo @@@
-echo @@@ "Building linux ARM binaries"
-echo @@@
-
-cd ~/foxdcoin/depends
-make HOST=arm-linux-gnueabihf $MAKEOPTS
-cd ~/foxdcoin
-export PATH=$PWD/depends/arm-linux-gnueabihf/native/bin:$PATH
-./autogen.sh
-CONFIG_SITE=$PWD/depends/arm-linux-gnueabihf/share/config.site ./configure --prefix=/ --disable-ccache --disable-maintainer-mode --disable-dependency-tracking --enable-glibc-back-compat --enable-reduce-exports --disable-bench --disable-gui-tests CFLAGS="-O2 -g" CXXFLAGS="-O2 -g" LDFLAGS="-static-libstdc++"
-make $MAKEOPTS 
-make -C src check-security
-mkdir -p ~/linuxARM
-make install DESTDIR=~/linuxARM/$DISTNAME
-cd ~/linuxARM
-find . -name "lib*.la" -delete
-find . -name "lib*.a" -delete
-rm -rf $DISTNAME/lib/pkgconfig
-find ${DISTNAME}/bin -type f -executable -exec ../foxdcoin/contrib/devtools/split-debug.sh {} {} {}.dbg \;
-find ${DISTNAME}/lib -type f -exec ../foxdcoin/contrib/devtools/split-debug.sh {} {} {}.dbg \;
-find $DISTNAME/ -not -name "*.dbg" | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ~/release/$DISTNAME-arm-linux-gnueabihf.tar.gz
-cd ~/foxdcoin
-rm -rf ~/linuxARM
-make clean
-export PATH=$PATH_orig
-
-
-echo @@@
-echo @@@ "Building linux aarch64 binaries"
-echo @@@
-
-cd ~/foxdcoin/depends
-make HOST=aarch64-linux-gnu $MAKEOPTS
-cd ~/foxdcoin
-export PATH=$PWD/depends/aarch64-linux-gnu/native/bin:$PATH
-./autogen.sh
-CONFIG_SITE=$PWD/depends/aarch64-linux-gnu/share/config.site ./configure --prefix=/ --disable-ccache --disable-maintainer-mode --disable-dependency-tracking --enable-glibc-back-compat --enable-reduce-exports --disable-bench --disable-gui-tests CFLAGS="-O2 -g" CXXFLAGS="-O2 -g" LDFLAGS="-static-libstdc++"
-make $MAKEOPTS 
-make -C src check-security
-mkdir -p ~/linuxaarch64
-make install DESTDIR=~/linuxaarch64/$DISTNAME
-cd ~/linuxaarch64
-find . -name "lib*.la" -delete
-find . -name "lib*.a" -delete
-rm -rf $DISTNAME/lib/pkgconfig
-find ${DISTNAME}/bin -type f -executable -exec ../foxdcoin/contrib/devtools/split-debug.sh {} {} {}.dbg \;
-find ${DISTNAME}/lib -type f -exec ../foxdcoin/contrib/devtools/split-debug.sh {} {} {}.dbg \;
-find $DISTNAME/ -not -name "*.dbg" | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ~/release/$DISTNAME-aarch64-linux-gnu.tar.gz
-cd ~/foxdcoin
-rm -rf ~/linuxaarch64
-make clean
-export PATH=$PATH_orig
 
 
 echo @@@
@@ -236,48 +108,6 @@ rm -rf release
 make clean
 export PATH=$PATH_orig
 
-
-echo @@@
-echo @@@ "Building windows 32 binaries"
-echo @@@
-
-update-alternatives --set i686-w64-mingw32-g++ /usr/bin/i686-w64-mingw32-g++-posix 
-mkdir -p ~/sign/win32
-PATH=$(echo "$PATH" | sed -e 's/:\/mnt.*//g') 
-cd ~/foxdcoin/depends
-make HOST=i686-w64-mingw32 $MAKEOPTS
-cd ~/foxdcoin
-export PATH=$PWD/depends/i686-w64-mingw32/native/bin:$PATH
-./autogen.sh
-CONFIG_SITE=$PWD/depends/i686-w64-mingw32/share/config.site ./configure --prefix=/ --disable-ccache --disable-maintainer-mode --disable-dependency-tracking --enable-reduce-exports --disable-bench --disable-gui-tests CFLAGS="-O2 -g" CXXFLAGS="-O2 -g"
-make $MAKEOPTS 
-make -C src check-security
-make deploy
-rename 's/-setup\.exe$/-setup-unsigned.exe/' *-setup.exe
-cp -f foxdcoin-*setup*.exe ~/release/unsigned/
-mkdir -p ~/win32
-make install DESTDIR=~/win32/$DISTNAME
-cd ~/win32
-mv ~/win32/$DISTNAME/bin/*.dll ~/win32/$DISTNAME/lib/
-find . -name "lib*.la" -delete
-find . -name "lib*.a" -delete
-rm -rf $DISTNAME/lib/pkgconfig
-find $DISTNAME/bin -type f -executable -exec i686-w64-mingw32-objcopy --only-keep-debug {} {}.dbg \; -exec i686-w64-mingw32-strip -s {} \; -exec i686-w64-mingw32-objcopy --add-gnu-debuglink={}.dbg {} \;
-find ./$DISTNAME -not -name "*.dbg"  -type f | sort | zip -X@ ./$DISTNAME-i686-w64-mingw32.zip
-mv ./$DISTNAME-i686-w64-*.zip ~/release/$DISTNAME-win32.zip
-cd ~/
-rm -rf win32
-cp -rf foxdcoin/contrib/windeploy ~/sign/win32
-cd ~/sign/win32/windeploy
-mkdir -p unsigned
-mv ~/foxdcoin/foxdcoin-*setup-unsigned.exe unsigned/
-find . | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ~/sign/$DISTNAME-win32-unsigned.tar.gz
-cd ~/sign
-rm -rf win32
-cd ~/foxdcoin
-rm -rf release
-make clean
-export PATH=$PATH_orig
 
 
 echo @@@
