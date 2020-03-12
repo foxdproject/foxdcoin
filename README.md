@@ -28,7 +28,6 @@ regularly to indicate new official, stable release versions of Foxdcoin Core.
 
 The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Developer IRC can be found on Freenode at #foxdcoin-core-dev.
 
 Testing
 -------
@@ -79,7 +78,7 @@ The Foxdcoin project is launched based on the hard work and continuous effort of
 
 Abstract
 ----------------
-Foxdcoin aims to implement a blockchain which is optimized specifically for the use case of transferring assets such as securities from one holder to another. Based on the extensive development and testing of Bitcoin, Foxdcoin is built on a fork of the Bitcoin code. Key changes include a faster block reward time and a change in the number, but not weighed distribution schedule, of coins. Foxdcoin is free and open source and will be issued and mined transparently with no pre-mine, developer allocation or any other similar set aside. Foxdcoin is intended to prioritize user control, privacy and censorship resistance and be jurisdiction agnostic while allowing simple optional additional features for users based on need.
+Foxdcoin aims to implement a blockchain which is optimized specifically for the use case of transferring assets such as securities from one holder to another. Based on the extensive development and testing of Bitcoin, Foxdcoin is built on a fork of the Ravencoin code. Key changes include a faster block reward time and a change in the number, but not weighed distribution schedule, of coins. Foxdcoin is free and open source and will be issued and mined transparently with no pre-mine, developer allocation or any other similar set aside. Foxdcoin is intended to prioritize user control, privacy and censorship resistance and be jurisdiction agnostic while allowing simple optional additional features for users based on need.
 
 
 
