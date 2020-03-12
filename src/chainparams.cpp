@@ -467,18 +467,18 @@ public:
         nAddNullQualifierTagBurnAmount = .1 * COIN;
 
         // Burn Addresses
-        strIssueAssetBurnAddress = "fdissueAssetXXXXXXXXXXXXXXXXWdnemQ";
-        strReissueAssetBurnAddress = "fdReissueAssetXXXXXXXXXXXXXXWG9NLd";
-        strIssueSubAssetBurnAddress = "fdissueSubAssetXXXXXXXXXXXXXbNiH6v";
-        strIssueUniqueAssetBurnAddress = "fdissueUniqueAssetXXXXXXXXXXS4695i";
-        strIssueMsgChannelAssetBurnAddress = "fdissueMsgChanneLAssetXXXXXXT2PBdD";
-        strIssueQualifierAssetBurnAddress = "fdissueQuaLifierXXXXXXXXXXXXUysLTj";
-        strIssueSubQualifierAssetBurnAddress = "fdissueSubQuaLifierXXXXXXXXXYffPLh";
-        strIssueRestrictedAssetBurnAddress = "fdissueRestrictedXXXXXXXXXXXXZVT9V";
-        strAddNullQualifierTagBurnAddress = "fdaddTagBurnXXXXXXXXXXXXXXXXX5oLMH";
+        strIssueAssetBurnAddress = "fXissueAssetXXXXXXXXXXXXXXXXZbEEFU";
+        strReissueAssetBurnAddress = "fXReissueAssetXXXXXXXXXXXXXXYSUun2";
+        strIssueSubAssetBurnAddress = "fXissueSubAssetXXXXXXXXXXXXXakqJkC";
+        strIssueUniqueAssetBurnAddress = "fXissueUniqueAssetXXXXXXXXXXSycUW7";
+        strIssueMsgChannelAssetBurnAddress = "fXissueMsgChanneLAssetXXXXXXRjh85D";
+        strIssueQualifierAssetBurnAddress = "fXissueQuaLifierXXXXXXXXXXXXXAGDbp";
+        strIssueSubQualifierAssetBurnAddress = "fXissueSubQuaLifierXXXXXXXXXXB1EjR";
+        strIssueRestrictedAssetBurnAddress = "fXissueRestrictedXXXXXXXXXXXb6ZKVu";
+        strAddNullQualifierTagBurnAddress = "fXaddTagBurnXXXXXXXXXXXXXXXXWYBj2e";
 
         // Global Burn Address
-        strGlobalBurnAddress = "n1BurnXXXXXXXXXXXXXXXXXXXXXXU1qejP";
+        strGlobalBurnAddress = "fXBurnXXXXXXXXXXXXXXXXXXXXXXX3XqfT";
 
         // DGW Activation
         nDGWActivationBlock = 1;
@@ -648,18 +648,18 @@ public:
         nAddNullQualifierTagBurnAmount = .1 * COIN;
 
         // Burn Addresses
-        strIssueAssetBurnAddress = "n1issueAssetXXXXXXXXXXXXXXXXWdnemQ";
-        strReissueAssetBurnAddress = "n1ReissueAssetXXXXXXXXXXXXXXWG9NLd";
-        strIssueSubAssetBurnAddress = "n1issueSubAssetXXXXXXXXXXXXXbNiH6v";
-        strIssueUniqueAssetBurnAddress = "n1issueUniqueAssetXXXXXXXXXXS4695i";
-        strIssueMsgChannelAssetBurnAddress = "n1issueMsgChanneLAssetXXXXXXT2PBdD";
-        strIssueQualifierAssetBurnAddress = "n1issueQuaLifierXXXXXXXXXXXXUysLTj";
-        strIssueSubQualifierAssetBurnAddress = "n1issueSubQuaLifierXXXXXXXXXYffPLh";
+        strIssueAssetBurnAddress = "n2issueAssetXXXXXXXXXXXXXXXXbfbi47";
+        strReissueAssetBurnAddress = "n2ReissueAssetXXXXXXXXXXXXXXTxxPkJ";
+        strIssueSubAssetBurnAddress = "n2issueSubAssetXXXXXXXXXXXXXVw16Ye";
+        strIssueUniqueAssetBurnAddress = "n2issueUniqueAssetXXXXXXXXXXWmN3Qg";
+        strIssueMsgChannelAssetBurnAddress = "n2issueMsgChanneLAssetXXXXXXW6188u";
+        strIssueQualifierAssetBurnAddress = "n2issueQuaLifierXXXXXXXXXXXXVQXVcN";
+        strIssueSubQualifierAssetBurnAddress = "n2issueSubQuaLifierXXXXXXXXXUAFxve";
         strIssueRestrictedAssetBurnAddress = "n1issueRestrictedXXXXXXXXXXXXZVT9V";
-        strAddNullQualifierTagBurnAddress = "n1addTagBurnXXXXXXXXXXXXXXXXX5oLMH";
+        strAddNullQualifierTagBurnAddress = "n2addTagBurnXXXXXXXXXXXXXXXXWQj6Et";
 
         // Global Burn Address
-        strGlobalBurnAddress = "n1BurnXXXXXXXXXXXXXXXXXXXXXXU1qejP";
+        strGlobalBurnAddress = "n2BurnXXXXXXXXXXXXXXXXXXXXXXV3KNcW";
 
         // DGW Activation
         nDGWActivationBlock = 200;
