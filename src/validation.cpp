@@ -516,7 +516,7 @@ static bool AcceptToMemoryPoolWorker(const CChainParams& chainparams, CTxMemPool
     AssertLockHeld(cs_main);
     if (pfMissingInputs)
         *pfMissingInputs = false;
-    if (!CheckTransaction(tx, state))
+    if (!CheckTransaction(tx, state, true, true))
         return false; // state filled in by CheckTransaction
 
     // Coinbase is only valid in a block, not as a loose transaction
@@ -3925,7 +3925,7 @@ static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state,
     return true;
 }
 
-bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW, bool fCheckMerkleRoot)
+bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW, bool fCheckMerkleRoot, bool fFromDB)
 {
     // These are checks that are independent of context.
 
@@ -3970,10 +3970,17 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
             return state.DoS(100, false, REJECT_INVALID, "bad-cb-multiple", false, "more than one coinbase");
 
     // Check transactions
-    for (const auto& tx : block.vtx)
-        if (!CheckTransaction(*tx, state))
+    for (const auto& tx : block.vtx) {
+        // If we are checking a block, we only want to do it when we aren't pull froms from the inital database checks
+        // we do this because on the database load, we don't know the status of the softfork bip yet
+        bool fFromBlock = true;
+        if (fFromDB)
+            fFromBlock = false;
+        if (!CheckTransaction(*tx, state, true, false, fFromBlock))
             return state.Invalid(false, state.GetRejectCode(), state.GetRejectReason(),
-                                 strprintf("Transaction check failed (tx hash %s) %s %s", tx->GetHash().ToString(), state.GetDebugMessage(), state.GetRejectReason()));
+                                 strprintf("Transaction check failed (tx hash %s) %s %s", tx->GetHash().ToString(),
+                                           state.GetDebugMessage(), state.GetRejectReason()));
+    }
 
     unsigned int nSigOps = 0;
     for (const auto& tx : block.vtx)
@@ -4846,7 +4853,8 @@ bool CVerifyDB::VerifyDB(const CChainParams& chainparams, CCoinsView *coinsview,
         if (!ReadBlockFromDisk(block, pindex, chainparams.GetConsensus()))
             return error("VerifyDB(): *** ReadBlockFromDisk failed at %d, hash=%s", pindex->nHeight, pindex->GetBlockHash().ToString());
         // check level 1: verify block validity
-        if (nCheckLevel >= 1 && !CheckBlock(block, state, chainparams.GetConsensus(), true, true)) // fCheckAssetDuplicate set to false, because we don't want to fail because the asset exists in our database, when loading blocks from our asset databse
+        bool fFromDB = true;
+        if (nCheckLevel >= 1 && !CheckBlock(block, state, chainparams.GetConsensus(), true, true, fFromDB)) // fCheckAssetDuplicate set to false, because we don't want to fail because the asset exists in our database, when loading blocks from our asset databse
             return error("%s: *** found bad block at %d, hash=%s (%s)\n", __func__,
                          pindex->nHeight, pindex->GetBlockHash().ToString(), FormatStateMessage(state));
         // check level 2: verify undo validity
@@ -5679,6 +5687,19 @@ bool AreAssetsDeployed() {
         fAssetsIsActive = true;
 
     return fAssetsIsActive;
+}
+
+bool AreEnforcedValueDeployed() {
+
+    if (fEnforcedValuesDeployed)
+        return true;
+
+    const ThresholdState thresholdState = VersionBitsTipState(GetParams().GetConsensus(), Consensus::DEPLOYMENT_ENFORCE_VALUE);
+    // We are going to activate this as soon as it locks it, we usually don't do this but this one is important
+    if (thresholdState == THRESHOLD_ACTIVE || thresholdState == THRESHOLD_LOCKED_IN)
+        fEnforcedValuesDeployed = true;
+
+    return fEnforcedValuesDeployed;
 }
 
 bool IsRip5Active()

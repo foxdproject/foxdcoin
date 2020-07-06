@@ -167,7 +167,7 @@ int64_t GetTransactionSigOpCost(const CTransaction& tx, const CCoinsViewCache& i
     return nSigOps;
 }
 
-bool CheckTransaction(const CTransaction& tx, CValidationState &state, bool fCheckDuplicateInputs)
+bool CheckTransaction(const CTransaction& tx, CValidationState &state, bool fCheckDuplicateInputs, bool fFromMempool, bool fFromBlock)
 {
     // Basic checks that don't depend on any context
     if (tx.vin.empty())
@@ -309,6 +309,19 @@ bool CheckTransaction(const CTransaction& tx, CValidationState &state, bool fChe
                 // Specific check and error message to go with to make sure the amount is 0
                 if (txout.nValue != 0)
                     return state.DoS(100, false, REJECT_INVALID, "bad-txns-asset-issued-amount-isn't-zero");
+            } else if (nType == TX_REISSUE_ASSET) {
+                // Always reject from the mempool
+                if (fFromMempool) {
+                    return state.DoS(100, false, REJECT_INVALID, "bad-txns-mempool-asset-reissued-amount-isn't-zero");
+                }
+
+                // Start rejecting when softfork goes live
+                if (AreEnforcedValueDeployed()) {
+                    if (fFromBlock) {
+                        if (txout.nValue != 0)
+                            return state.DoS(100, false, REJECT_INVALID, "bad-txns-asset-reissued-amount-isn't-zero");
+                    }
+                }
             }
         }
     }
