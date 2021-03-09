@@ -223,9 +223,9 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("6f092f185b2e997f6eedcf6c91479b0e7d392a4f38d39f48ef3a4d17772b634f"));
 
         /**
-          * vSeeds.emplace_back("seed1.foxrtb.com", false);
-          * vSeeds.emplace_back("seed2.foxrtb.com", false);
-          * vSeeds.emplace_back("seed3.foxrtb.com", false);
+          * vSeeds.emplace_back("seed1.foxdcoin.com", false);
+          * vSeeds.emplace_back("seed2.foxdcoin.com", false);
+          * vSeeds.emplace_back("seed3.foxdcoin.com", false);
          */
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,35);

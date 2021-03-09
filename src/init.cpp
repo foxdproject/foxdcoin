@@ -617,7 +617,7 @@ std::string HelpMessage(HelpMessageMode mode)
 std::string LicenseInfo()
 {
     const std::string URL_SOURCE_CODE = "<https://github.com/Foxdproject/Foxdcoin>";
-    const std::string URL_WEBSITE = "<https://foxrtb.com>";
+    const std::string URL_WEBSITE = "<https://foxdcoin.com>";
 
     return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR) + " ") + "\n" +
            "\n" +

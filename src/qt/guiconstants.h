@@ -113,7 +113,7 @@ static const int MAX_URI_LENGTH = 255;
 #define SPINNER_FRAMES 36
 
 #define QAPP_ORG_NAME "Foxdcoin"
-#define QAPP_ORG_DOMAIN "foxrtb.com"
+#define QAPP_ORG_DOMAIN "foxdcoin.com"
 #define QAPP_APP_NAME_DEFAULT "Foxdcoin-Qt"
 #define QAPP_APP_NAME_TESTNET "Foxdcoin-Qt-testnet"
 

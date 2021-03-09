@@ -1,7 +1,7 @@
 Foxdcoin Core integration/staging tree
 =====================================
 
-https://foxrtb.com
+https://foxdcoin.com
 
 What is Foxdcoin?
 ----------------
