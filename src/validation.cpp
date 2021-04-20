@@ -3061,6 +3061,11 @@ void static UpdateTip(CBlockIndex *pindexNew, const CChainParams& chainParams) {
             WarningBitsConditionChecker checker(bit);
             ThresholdState state = checker.GetStateFor(pindex, chainParams.GetConsensus(), warningcache[bit]);
             if (state == THRESHOLD_ACTIVE || state == THRESHOLD_LOCKED_IN) {
+                // Only warn about bits that aren't in your current BIP9 deployments vector
+                for (const auto& known_deployments : chainParams.GetConsensus().vDeployments) {
+                    if (known_deployments.bit == bit)
+                        continue;
+                }
                 const std::string strWarning = strprintf(_("Warning: unknown new rules activated (versionbit %i)"), bit);
                 if (bit == 28) // DUMMY TEST BIT
                     continue;
