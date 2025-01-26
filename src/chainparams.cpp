@@ -248,10 +248,12 @@ public:
                  {    1, uint256S("0x00000457e73653668af20d7cdb4932c49576a2783ea729e16a9ebe833584f482")},
                  {    3, uint256S("0x000002c96c8a039acdee4a7a02f8d47b8dc057a14d14bdf02e64c908fa908296")},
                  { 5000, uint256S("0x000000649e183754abc34009b179fbf6201559411b14c6d2cd50ff92b5c6fbfd")},
-                 { 20000, uint256S("000000000bdec48ce19dedffc919a7f9fc7ec7a91d07af79961cb978fc6d4bed")}
+                 { 20000, uint256S("000000000bdec48ce19dedffc919a7f9fc7ec7a91d07af79961cb978fc6d4bed")},
+                 { 2536940, uint256S("000000001c60b4b64e68e5fdbf62ae9dd6a6d077ffc76a0b52fe97a3318f8d77")} //adding a checkpoint
 
              }
           };
+
          
 
 
